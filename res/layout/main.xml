@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/mainlayout"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+    
+    <com.jbdubois.metro.MetroImageView android:id="@+id/metroImage"
+    	android:layout_width="fill_parent"
+    	android:layout_height="fill_parent"
+    	android:scaleType="centerCrop" >
+    </com.jbdubois.metro.MetroImageView>
+    
+    <LinearLayout
+	    android:id="@+id/zoomview"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignBottom="@+id/metroImage"
+	    android:layout_centerHorizontal="true"
+	    android:background="@drawable/border"
+	     >
+		
+		<ImageButton
+        android:id="@+id/zoomOut"
+        android:src="@drawable/zoomout"
+        android:background="@null"
+        android:layout_width="45px"
+        android:layout_height="45px"
+        android:layout_alignParentRight="true"
+        android:layout_marginLeft="5dip"
+        android:layout_marginRight="35dip"
+        android:layout_marginTop="5dip"
+        android:layout_marginBottom="5dip" />
+		
+		<ImageButton
+        android:id="@+id/zoomIn"
+        android:src="@drawable/zoomin"
+        android:background="@null"
+        android:layout_width="45px"
+        android:layout_height="45px"
+        android:layout_alignParentRight="true"
+        android:layout_marginLeft="35dip"
+        android:layout_marginRight="5dip"
+        android:layout_marginTop="5dip"
+        android:layout_marginBottom="5dip" />
+		
+	</LinearLayout>
+</RelativeLayout>
