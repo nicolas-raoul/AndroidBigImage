@@ -9,7 +9,6 @@ import android.graphics.Matrix;
 import android.graphics.RectF;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
@@ -18,37 +17,31 @@ import android.view.View.OnTouchListener;
 import android.widget.ImageButton;
 
 public class AndroidBigImage extends Activity {
-	AndroidBigImageView 	androidBigImageView;
-	ImageButton	zoomInButton;
-	ImageButton	zoomOutButton;
-	Matrix 		matrix;
-	RectF 		sourceRect;
-	RectF 		destinationRect;
-	Bitmap		bitmap;
-	Timer		timer;
-	Animation	animation;
-	Handler handle = new Handler();
+	private AndroidBigImageView 	androidBigImageView;
+	private ImageButton	zoomInButton;
+	private ImageButton	zoomOutButton;
+	private Matrix 		matrix;
+	private RectF 		sourceRect;
+	private RectF 		destinationRect;
+	private Bitmap		bitmap;
+	private Timer		timer;
+	private Animation	animation;
+	private Handler handle = new Handler();
 	
-	public static final int Menu1 = Menu.FIRST + 1;
-    public static final int Menu2 = Menu.FIRST + 2;
-    public static final int Menu3 = Menu.FIRST + 3;
+	private int		imageSizeX = 2047;
+	private int		imageSizeY = 2047;
+	private static final float 	INITIAL_SCALE = (float)1;
+	private static final float 	MAGNIFY_SCALE = (float)1.9;
 	
-    int		imageSizeX = 2047;
-	int		imageSizeY = 2047;
-	static float 	INITIAL_SCALE = (float)1;
-	static float 	MAGNIFY_SCALE = (float)1.9;
+	private float	current_scale = INITIAL_SCALE;
+	private int		current_centerX = imageSizeX/2;
+	private int 	current_centerY = imageSizeY/2;
+	private int		current_drawable = R.drawable.metro;
 	
-	float	current_scale = INITIAL_SCALE;
-	int		current_centerX = imageSizeX/2;
-	int 	current_centerY = imageSizeY/2;
-	int		current_drawable = R.drawable.metro;
-	
-	int		moveHistorySize;
-	float	lastTwoXMoves[] = new float[2];
-	float	lastTwoYMoves[] = new float[2];
-	float	downPosX;
-	float	downPosY;
-	long	downTimer;
+	private int		moveHistorySize;
+	private float	lastTwoXMoves[] = new float[2];
+	private float	lastTwoYMoves[] = new float[2];
+	private long	downTimer;
 	
     /** Called when the activity is first created. */
     @Override
@@ -143,8 +136,6 @@ public class AndroidBigImage extends Activity {
     			animation.stopProcess();
     			lastTwoXMoves[0] = event.getX();
     			lastTwoYMoves[0] = event.getY();
-    			downPosX = event.getX();
-    			downPosY = event.getY();
     			downTimer = event.getEventTime();
     			moveHistorySize = 1;
     		}

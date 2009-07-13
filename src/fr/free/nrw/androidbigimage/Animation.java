@@ -6,21 +6,21 @@ import android.os.Handler;
 
 public class Animation extends TimerTask {
 	
-	AnimationCallBack callBack;
-	Handler handle;
-	Runnable cbkAction;
-	float speedX;
-	float speedY;
-	float currentCenterX, currentCenterY;
-	float current_scale, target_scale;
-	boolean runningMove;
-	boolean runningScale;
-	boolean scaleDirectionPlus;
+	private AnimationCallBack callBack;
+	private Handler handle;
+	private Runnable cbkAction;
+	private float speedX;
+	private float speedY;
+	private float currentCenterX, currentCenterY;
+	private float current_scale, target_scale;
+	private boolean runningMove;
+	private boolean runningScale;
+	private boolean scaleDirectionPlus;
 	
-	static float SCALE_STEP = (float)0.04;
-	static float MAX_SPEED = 100;
-	static float END_SPEED_THRESHOLD = (float)4;
-	static float SPEED_STEP = (float)1.1;
+	private static final float SCALE_STEP = (float)0.04;
+	private static final float MAX_SPEED = 100;
+	private static final float END_SPEED_THRESHOLD = (float)4;
+	private static final float SPEED_STEP = (float)1.1;
 	
 	public Animation(Handler handle, int current_centerX, int current_centerY, float currentScale) {
 		super();
@@ -110,5 +110,4 @@ public class Animation extends TimerTask {
 	public void stopProcess(){
 		runningMove = false;
 	}
-
 }

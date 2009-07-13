@@ -6,11 +6,11 @@ import android.util.AttributeSet;
 import android.widget.ImageView;
 
 public class AndroidBigImageView extends ImageView {
-	SizeCallBack callBack;
-	Handler handle;
-	Runnable cbkAction;
-	int width, height;
-	
+	private SizeCallBack callBack;
+	private Handler handle;
+	private Runnable cbkAction;
+	private int width;
+	private int height;
 	
 	public AndroidBigImageView(Context context) {
 		super(context);
@@ -58,5 +58,4 @@ public class AndroidBigImageView extends ImageView {
 	public void setHandle(Handler h){
 		handle = h;
 	}
-
 }
