@@ -1,19 +1,18 @@
-package com.jbdubois.metro;
+package fr.free.nrw.androidbigimage;
 
 import android.content.Context;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.widget.ImageView;
-import com.jbdubois.metro.SizeCallBack;
 
-public class MetroImageView extends ImageView {
+public class AndroidBigImageView extends ImageView {
 	SizeCallBack callBack;
 	Handler handle;
 	Runnable cbkAction;
 	int width, height;
 	
 	
-	public MetroImageView(Context context) {
+	public AndroidBigImageView(Context context) {
 		super(context);
 		cbkAction = new Runnable(){
 			public void run(){
@@ -23,7 +22,7 @@ public class MetroImageView extends ImageView {
 		};
 	}
 
-	public MetroImageView(Context context, AttributeSet attrs) {
+	public AndroidBigImageView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		cbkAction = new Runnable(){
 			public void run(){
@@ -33,7 +32,7 @@ public class MetroImageView extends ImageView {
 		};
 	}
 
-	public MetroImageView(Context context, AttributeSet attrs, int defStyle) {
+	public AndroidBigImageView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 		cbkAction = new Runnable(){
 			public void run(){

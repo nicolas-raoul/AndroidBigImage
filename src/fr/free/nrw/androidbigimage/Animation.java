@@ -1,11 +1,10 @@
-package com.jbdubois.metro;
+package fr.free.nrw.androidbigimage;
 
 import java.util.TimerTask;
-import com.jbdubois.metro.AnimationCallBack;
-import android.os.Handler;
-import java.lang.Runnable;
 
-public class AnimationMetro extends TimerTask {
+import android.os.Handler;
+
+public class Animation extends TimerTask {
 	
 	AnimationCallBack callBack;
 	Handler handle;
@@ -23,7 +22,7 @@ public class AnimationMetro extends TimerTask {
 	static float END_SPEED_THRESHOLD = (float)4;
 	static float SPEED_STEP = (float)1.1;
 	
-	public AnimationMetro(Handler handle, int current_centerX, int current_centerY, float currentScale) {
+	public Animation(Handler handle, int current_centerX, int current_centerY, float currentScale) {
 		super();
 		speedX = 0;
 		speedY = 0;

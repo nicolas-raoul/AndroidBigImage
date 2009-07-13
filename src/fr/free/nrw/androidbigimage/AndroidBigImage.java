@@ -1,34 +1,32 @@
-package com.jbdubois.metro;
+package fr.free.nrw.androidbigimage;
+
+import java.util.Timer;
 
 import android.app.Activity;
-import android.os.Bundle;
-import android.widget.ImageButton;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.Menu;
-import android.view.Window;
-import android.view.View.OnTouchListener;
-import android.view.View.OnClickListener;
-import android.view.MotionEvent;
-import android.graphics.Matrix;
-import android.graphics.RectF;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import com.jbdubois.metro.AnimationMetro;
-import com.jbdubois.metro.AnimationCallBack;
-import java.util.Timer;
+import android.graphics.Matrix;
+import android.graphics.RectF;
+import android.os.Bundle;
 import android.os.Handler;
+import android.view.Menu;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.Window;
+import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
+import android.widget.ImageButton;
 
-public class metro extends Activity {
-	MetroImageView 	metroImage;
+public class AndroidBigImage extends Activity {
+	AndroidBigImageView 	androidBigImageView;
 	ImageButton	zoomInButton;
 	ImageButton	zoomOutButton;
-	Matrix 		metroMatrix;
+	Matrix 		matrix;
 	RectF 		sourceRect;
 	RectF 		destinationRect;
-	Bitmap		planBitmap;
-	Timer		metroSchedule;
-	AnimationMetro animation;
+	Bitmap		bitmap;
+	Timer		timer;
+	Animation	animation;
 	Handler handle = new Handler();
 	
 	public static final int Menu1 = Menu.FIRST + 1;
@@ -59,13 +57,13 @@ public class metro extends Activity {
         
         requestWindowFeature(Window.FEATURE_NO_TITLE); 
         setContentView(R.layout.main);
-        metroImage = (MetroImageView)findViewById(R.id.metroImage);
+        androidBigImageView = (AndroidBigImageView)findViewById(R.id.image);
         zoomInButton = (ImageButton)findViewById(R.id.zoomIn);
         zoomOutButton = (ImageButton)findViewById(R.id.zoomOut);
                
         sourceRect = new RectF();
         destinationRect = new RectF();
-        metroMatrix = new Matrix();
+        matrix = new Matrix();
         
         if(savedInstanceState != null){
         	current_centerX = savedInstanceState.getInt("centerX");
@@ -76,24 +74,24 @@ public class metro extends Activity {
         	imageSizeY = savedInstanceState.getInt("sizeY");
         }
         
-        metroSchedule = new Timer();
-        animation = new AnimationMetro(handle, current_centerX, current_centerY, current_scale);
+        timer = new Timer();
+        animation = new Animation(handle, current_centerX, current_centerY, current_scale);
         
-        metroImage.setHandle(handle);
-        metroImage.setCallBack(sizecallback);
+        androidBigImageView.setHandle(handle);
+        androidBigImageView.setCallBack(sizeCallback);
         
         animation.stopProcess();
-        animation.setCallBack(animateMetro);
-        metroSchedule.scheduleAtFixedRate(animation, 200, 30);
+        animation.setCallBack(animationCallBack);
+        timer.scheduleAtFixedRate(animation, 200, 30);
         
-        metroImage.setOnTouchListener(metroListener);
-        zoomInButton.setOnClickListener(metroZoomInListener);
-        zoomOutButton.setOnClickListener(metroZoomOutListener);
+        androidBigImageView.setOnTouchListener(metroListener);
+        zoomInButton.setOnClickListener(zoomInListener);
+        zoomOutButton.setOnClickListener(zoomOutListener);
         
-        planBitmap = BitmapFactory.decodeResource(getResources(), current_drawable);
-    	metroImage.setImageBitmap(planBitmap);
-    	metroImage.getDrawable().setFilterBitmap(true);
-    	metroImage.setImageMatrix(metroMatrix);
+        bitmap = BitmapFactory.decodeResource(getResources(), current_drawable);
+    	androidBigImageView.setImageBitmap(bitmap);
+    	androidBigImageView.getDrawable().setFilterBitmap(true);
+    	androidBigImageView.setImageMatrix(matrix);
     }
     
     @Override
@@ -117,24 +115,10 @@ public class metro extends Activity {
     	outState.putInt("sizeY", imageSizeY);
     }
     
-    public void onDestroy()
-    {    	
-    	if(!planBitmap.isRecycled())
-    		planBitmap.recycle();
-    	
+    public void onDestroy() {    	
+    	if(!bitmap.isRecycled())
+    		bitmap.recycle();
     	super.onDestroy();
-    }
-    
-    /** hook into menu button for activity */
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-      populateMenu(menu);
-      return super.onCreateOptionsMenu(menu);
-    }
-    /** when menu button option selected */
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-      return applyMenuChoice(item) || super.onOptionsItemSelected(item);
     }
     
     private OnTouchListener metroListener = new OnTouchListener() {
@@ -149,8 +133,8 @@ public class metro extends Activity {
     			lastTwoYMoves[0] = event.getY();
     			
     			if(moveHistorySize >= 2){
-	    			current_centerX += (int)((lastTwoXMoves[1] - lastTwoXMoves[0]) * (imageSizeX / current_scale) / metroImage.getWidth());
-	    			current_centerY += (int)((lastTwoYMoves[1] - lastTwoYMoves[0]) * (imageSizeY / current_scale) / metroImage.getHeight());
+	    			current_centerX += (int)((lastTwoXMoves[1] - lastTwoXMoves[0]) * (imageSizeX / current_scale) / androidBigImageView.getWidth());
+	    			current_centerY += (int)((lastTwoYMoves[1] - lastTwoYMoves[0]) * (imageSizeY / current_scale) / androidBigImageView.getHeight());
 		    		
 		    		updateDisplay();
     			}
@@ -167,8 +151,8 @@ public class metro extends Activity {
     		else if((event.getAction() == MotionEvent.ACTION_UP) && (moveHistorySize >= 1)) {
     			
     			if(event.getEventTime() != downTimer){
-	    			float speedX = (lastTwoXMoves[1] - lastTwoXMoves[0]) * (imageSizeX / current_scale) / metroImage.getWidth();
-	    			float speedY = (lastTwoYMoves[1] - lastTwoYMoves[0]) * (imageSizeY / current_scale) / metroImage.getHeight();
+	    			float speedX = (lastTwoXMoves[1] - lastTwoXMoves[0]) * (imageSizeX / current_scale) / androidBigImageView.getWidth();
+	    			float speedY = (lastTwoYMoves[1] - lastTwoYMoves[0]) * (imageSizeY / current_scale) / androidBigImageView.getHeight();
 	    			
 	    			speedX /= event.getEventTime() - downTimer;
 	    			speedY /= event.getEventTime() - downTimer;
@@ -184,7 +168,7 @@ public class metro extends Activity {
     	}
     };
     
-    private OnClickListener metroZoomInListener = new OnClickListener() { 
+    private OnClickListener zoomInListener = new OnClickListener() { 
     	public void onClick(View v) {
     		animation.stopProcess();
     		
@@ -195,7 +179,7 @@ public class metro extends Activity {
     	}
     };
     
-    private OnClickListener metroZoomOutListener = new OnClickListener() { 
+    private OnClickListener zoomOutListener = new OnClickListener() { 
     	public void onClick(View v) {
     		animation.stopProcess();
     		
@@ -208,17 +192,16 @@ public class metro extends Activity {
     	}
     };
     
-    private AnimationCallBack animateMetro = new AnimationCallBack() {
+    private AnimationCallBack animationCallBack = new AnimationCallBack() {
     	public void onTimer(int centerX, int centerY, float scale){
 			current_centerX = centerX;
 			current_centerY = centerY;
 			current_scale = scale;
-			
 			updateDisplay();
     	}
     };
     
-    private SizeCallBack sizecallback = new SizeCallBack() {
+    private SizeCallBack sizeCallback = new SizeCallBack() {
     	public void onSizeChanged(int w, int h){
     		destinationRect.set((float)0, (float)0, (float)w, (float)h);
     		updateDisplay();
@@ -227,8 +210,8 @@ public class metro extends Activity {
     
     private void updateDisplay(){
     	calculateSourceRect(current_centerX, current_centerY, current_scale);
-		metroMatrix.setRectToRect(sourceRect, destinationRect, Matrix.ScaleToFit.FILL);
-		metroImage.setImageMatrix(metroMatrix);
+		matrix.setRectToRect(sourceRect, destinationRect, Matrix.ScaleToFit.FILL);
+		androidBigImageView.setImageMatrix(matrix);
     }
     
     private void calculateSourceRect(int centerX, int centerY, float scale){
@@ -239,13 +222,13 @@ public class metro extends Activity {
 	    	ySubValue = (int)((imageSizeY/2) / scale);
 	    	xSubValue = ySubValue;
 	    	
-	    	xSubValue = (int) (xSubValue * ((float)metroImage.getWidth() / (float)metroImage.getHeight()));
-    	}else
-    	{
+	    	xSubValue = (int) (xSubValue * ((float)androidBigImageView.getWidth() / (float)androidBigImageView.getHeight()));
+    	}
+    	else{
     		xSubValue = (int)((imageSizeX/2) / scale);
 	    	ySubValue = xSubValue;
 	    	
-	    	ySubValue = (int) (ySubValue * ((float)metroImage.getHeight() / (float)metroImage.getWidth()));
+	    	ySubValue = (int) (ySubValue * ((float)androidBigImageView.getHeight() / (float)androidBigImageView.getWidth()));
     	}
     	
     	if(centerX - xSubValue < 0) {
@@ -270,51 +253,17 @@ public class metro extends Activity {
     	
     	sourceRect.set(centerX - xSubValue, centerY - ySubValue, centerX + xSubValue, centerY + ySubValue);
     }
-
-    public void populateMenu(Menu menu) {
-      menu.setQwertyMode(true);
-
-      MenuItem item1 = menu.add(0, Menu1, 0, "Metro");
-      item1.setAlphabeticShortcut('m');
-      item1.setIcon(R.drawable.icon);
-
-      MenuItem item2 = menu.add(0, Menu2, 0, "RER");
-      item2.setAlphabeticShortcut('r');
-      item2.setIcon(R.drawable.rerlogo);
-      
-      MenuItem item3 = menu.add(0, Menu3, 0, "Noctilien");
-      item3.setAlphabeticShortcut('n');
-      item3.setIcon(R.drawable.noctilienlogo);
-
-    }
-    
-    public boolean applyMenuChoice(MenuItem item){
-    	switch (item.getItemId()) {
-    		case Menu1 : 
-    			setNewDrawable(R.drawable.metro);
-    			break;
-    		case Menu2 : 
-    			setNewDrawable(R.drawable.rer);
-    			break;
-    		case Menu3 : 
-    			setNewDrawable(R.drawable.noctilien);
-    			break;
-    		default: break;
-    	}
-
-    	return true;
-    }
     
     public void setNewDrawable(int resId){
     	current_drawable = resId;
-    	planBitmap.recycle();
-    	planBitmap = BitmapFactory.decodeResource(getResources(), resId);
-    	metroImage.setImageBitmap(planBitmap);
-    	metroImage.getDrawable().setFilterBitmap(true);
+    	bitmap.recycle();
+    	bitmap = BitmapFactory.decodeResource(getResources(), resId);
+    	androidBigImageView.setImageBitmap(bitmap);
+    	androidBigImageView.getDrawable().setFilterBitmap(true);
     	
     	current_scale = INITIAL_SCALE;
-    	imageSizeX = planBitmap.getWidth();
-    	imageSizeY = planBitmap.getHeight();
+    	imageSizeX = bitmap.getWidth();
+    	imageSizeY = bitmap.getHeight();
     	current_centerX = imageSizeX/2;
     	current_centerY = imageSizeY/2;
     	
