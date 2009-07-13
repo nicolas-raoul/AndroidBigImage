@@ -36,7 +36,7 @@ public class AndroidBigImage extends Activity {
 	private float	current_scale = INITIAL_SCALE;
 	private int		current_centerX = imageSizeX/2;
 	private int 	current_centerY = imageSizeY/2;
-	private int		current_drawable = R.drawable.metro;
+	private int		current_drawable = R.drawable.image;
 	
 	private int		moveHistorySize;
 	private float	lastTwoXMoves[] = new float[2];
