@@ -82,6 +82,10 @@ public class AndroidBigImage extends Activity {
         zoomOutButton.setOnClickListener(zoomOutListener);
         
         bitmap = BitmapFactory.decodeResource(getResources(), current_drawable);
+
+        imageSizeX  = bitmap.getWidth();
+        imageSizeY = bitmap.getHeight();
+
     	androidBigImageView.setImageBitmap(bitmap);
     	androidBigImageView.getDrawable().setFilterBitmap(true);
     	androidBigImageView.setImageMatrix(matrix);
