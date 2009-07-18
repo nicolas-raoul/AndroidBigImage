@@ -39,8 +39,7 @@ src/fr/free/nrw/androidbigimage/Animation.java \
 src/fr/free/nrw/androidbigimage/AnimationCallBack.java \
 src/fr/free/nrw/androidbigimage/SizeCallBack.java \
 res/layout/main.xml \
-AndroidManifest.xml \
-.project
+AndroidManifest.xml
 do
     sed "s/androidbigimage/androidbigimage.${APPLICATION_ID}/g" ${FILE} > ${TMPFILE}
     mv ${TMPFILE} ${FILE}
@@ -54,6 +53,10 @@ do
     sed "s/AndroidBigImage/${APPLICATION_NAME}/g" ${FILE} > ${TMPFILE}
     mv ${TMPFILE} ${FILE}
 done
+
+# Rename Eclipse project.
+sed "s/AndroidBigImage/${APPLICATION_ID}/g" .project > ${TMPFILE}
+mv ${TMPFILE} .project
 
 # Create package in the filesystem.
 mkdir src/fr/free/nrw/androidbigimage/${APPLICATION_ID}
