@@ -8,7 +8,7 @@
     <fr.free.nrw.androidbigimage.AndroidBigImageView android:id="@+id/image"
     	android:layout_width="fill_parent"
     	android:layout_height="fill_parent"
-    	android:scaleType="centerCrop" >
+    	android:scaleType="matrix" > <!-- Change it to "centerCrop" for Android 1.5 -->
     </fr.free.nrw.androidbigimage.AndroidBigImageView>
     
     <LinearLayout
