@@ -4,7 +4,7 @@
 # See http://code.google.com/p/androidbigimage
 #
 # Command-line usage:
-# ./generate_application my_milan_subway_map.png "Milan Subway"
+# ./generate_application.sh my_milan_subway_map.png "Milan Subway"
 #
 # First argument: path to your image
 # Second argument: name you want to give to your new application
